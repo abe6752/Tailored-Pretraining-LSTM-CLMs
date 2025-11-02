@@ -1,0 +1,38 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+
+		{
+			"name": "Python Debugger: Current File",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${file}",
+			"console": "integratedTerminal",
+			"justMyCode": false,
+		},
+		{
+			"name": "Python Debugger: finetune_model.py",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${file}",
+			"console": "integratedTerminal",
+			"justMyCode": false,
+			// "args": ["--model", "lstm",
+			//"--save-epoch-models",
+			// "--case", "debug_lstm_finetune",
+			// "--model-structure", "results/vanila_lstm/lr0005_embed256_layer3_hdim512/model/best_model_structure_epoch16.pickle",
+			// "--model-state", "results/vanila_lstm/lr0005_embed256_layer3_hdim512/model/best_model_epoch16.pth",
+			// "--vocab", "results/vanila_lstm/lr0005_embed256_layer3_hdim512/model/vocabulary.pickle",
+			// "--use-cpus",
+			// "--lr", "0.0001"]
+		}
+	]
+}
+
+// gpt version
+//"--nblocks", "2", 
+//"--pe-dropout-ratio", "0.2",
+//"--nheads", "2",

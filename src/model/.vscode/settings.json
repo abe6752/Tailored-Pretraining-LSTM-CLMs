@@ -1,0 +1,8 @@
+{
+	"python.autoComplete.extraPaths": [
+		"/Users/miyao/work/research/generative_models/"
+	],
+	"python.analysis.extraPaths": [
+		"/Users/miyao/work/research/generative_models/generative_models"
+	]
+}
