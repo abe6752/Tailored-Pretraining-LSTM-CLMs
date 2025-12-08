@@ -5,25 +5,37 @@ from rdkit.Chem import AllChem
 from src.model.generative_models.generative_models.utils import Smiles2RDKitCanonicalSmiles
 from src.chem_utils import canonicalize_smiles
 
-def gen_smiles_metrics(train_smiles: pd.DataFrame, gen_smiles: pd.DataFrame, trainsmi_col='smiles', gensmi_col='smiles', train_canonicalize=True):
+def gen_smiles_metrics(train_smiles: pd.DataFrame, gen_smiles: pd.DataFrame, trainsmi_col='smiles', gensmi_col='smiles'):
     gen_smiles['canonical_smiles'] = gen_smiles[gensmi_col].apply(Smiles2RDKitCanonicalSmiles)
     valid_mols = gen_smiles['canonical_smiles'].dropna()
     nvalid     = len(valid_mols)
     unique 	   = valid_mols.drop_duplicates()
 
-    if train_canonicalize:
-        train_cano_smi = canonicalize_smiles(train_smiles[trainsmi_col])
-    else:
-        train_cano_smi = train_smiles[trainsmi_col].dropna().unique().tolist()
+    # Novelty against canonicalized training SMILES
+    train_cano_smi = canonicalize_smiles(train_smiles[trainsmi_col])
     train_set = set(train_cano_smi)
-    isnovel	= ~unique.isin(train_set)
+    isnovel	= ~unique.isin(train_set) if len(unique) > 0 else []
     novelty = isnovel.sum() / len(unique) if len(unique) > 0 else 0.0
+
+    # Novelty against randomized training SMILES
+    valid_idx = valid_mols.index
+    uncano_valid  = gen_smiles.loc[valid_idx, gensmi_col].dropna()
+    uncano_unique = uncano_valid.drop_duplicates()
+
+    uncano_train_smi = train_smiles[trainsmi_col].dropna().unique().tolist()
+    uncano_train_set = set(uncano_train_smi)
+    if len(uncano_unique) > 0:
+        uncano_isnovel   = ~uncano_unique.isin(uncano_train_set)
+        uncano_novelty   = uncano_isnovel.sum() / len(uncano_unique)
+    else:
+        uncano_novelty = 0.0
 
     avg_length = np.mean([len(smi) for smi in unique]) if len(unique) > 0 else 0.0
 
     return dict(validity=float(nvalid)/len(gen_smiles) if len(gen_smiles) > 0 else 0.0, 
                 unique=float(len(unique))/nvalid if nvalid > 0 else 0,
                 novelty=novelty,
+                novelty_randomized_SMILES=uncano_novelty,
                 avg_length=avg_length
                 )
 
