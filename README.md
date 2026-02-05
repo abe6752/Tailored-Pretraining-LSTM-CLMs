@@ -1,5 +1,5 @@
 # Tailored-Pretraining-LSTM-CLMs
----
+
 This repository contains the codes, data preparation scripts, and evaluation workflow used in the following study:
 
 > **Ryuto Abe and Tomoyuki Miyao**,
@@ -7,7 +7,7 @@ This repository contains the codes, data preparation scripts, and evaluation wor
 > 
 
 ## Installation
----
+
 1. Clone this repository:
   
 ```bash
@@ -23,7 +23,7 @@ conda activate smi-lstm
 ```
 
 ## Dataset Preparation
----
+
 To reproduce the results reported in the paper, you first need to prepare the datasets used for model pre-training and fine-tuning.
   
 Please follow the instructions in the Jupyter notebook:
@@ -31,7 +31,7 @@ Please follow the instructions in the Jupyter notebook:
 👉 `0_dataset_preparation.ipynb`
 
 ## Reproducing the Results
----
+
 Once the datasets have been prepared, you can reproduce the experimental results presented in the paper by executing the notebooks in the `notebooks/` directory in the following order:
   
 1. `1_smiles_generative_models.ipynb` - Pre-train and fine-tune the LSTM chemical language models
