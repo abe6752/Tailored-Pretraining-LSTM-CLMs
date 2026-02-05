@@ -35,7 +35,7 @@ def read_smiles_list_tsv(path, col='canonical_smiles', dropna=False, dedup=False
     Returns:
         list: List of SMILES strings
     """
-    df = pd.read_table(path, index_col=0)
+    df = pd.read_table(path)
     if dropna:
         df = df.dropna(subset=[col])
     if dedup:
