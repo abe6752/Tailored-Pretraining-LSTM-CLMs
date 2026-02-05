@@ -6,6 +6,7 @@ from src.model.generative_models.generative_models.utils import Smiles2RDKitCano
 from src.chem_utils import canonicalize_smiles
 
 def gen_smiles_metrics(train_smiles: pd.DataFrame, gen_smiles: pd.DataFrame, trainsmi_col='smiles', gensmi_col='smiles'):
+    gen_smiles = gen_smiles.copy()
     gen_smiles['canonical_smiles'] = gen_smiles[gensmi_col].apply(Smiles2RDKitCanonicalSmiles)
     valid_mols = gen_smiles['canonical_smiles'].dropna()
     nvalid     = len(valid_mols)
@@ -21,6 +22,7 @@ def gen_smiles_metrics(train_smiles: pd.DataFrame, gen_smiles: pd.DataFrame, tra
     valid_idx = valid_mols.index
     uncano_valid  = gen_smiles.loc[valid_idx, gensmi_col].dropna()
     uncano_unique = uncano_valid.drop_duplicates()
+    uncano_uniqueness = len(uncano_unique)/len(uncano_valid) if len(uncano_valid) > 0 else 0
 
     uncano_train_smi = train_smiles[trainsmi_col].dropna().unique().tolist()
     uncano_train_set = set(uncano_train_smi)
@@ -34,6 +36,7 @@ def gen_smiles_metrics(train_smiles: pd.DataFrame, gen_smiles: pd.DataFrame, tra
 
     return dict(validity=float(nvalid)/len(gen_smiles) if len(gen_smiles) > 0 else 0.0, 
                 unique=float(len(unique))/nvalid if nvalid > 0 else 0,
+                unique_uncano=uncano_uniqueness,
                 novelty=novelty,
                 novelty_randomized_SMILES=uncano_novelty,
                 avg_length=avg_length
